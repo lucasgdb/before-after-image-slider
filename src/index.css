@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    font-family: "Roboto", sans-serif;
+  }
+}
+
 body {
-  background-color: #f7f8fc;
+  background-image: linear-gradient(225deg, #ffc63f, #fd3358 49%, #bc35d8);
 }

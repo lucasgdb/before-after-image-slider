@@ -1,15 +1,35 @@
 import { useState, useRef } from "react";
 import { Image } from "./Image";
+import { Slider } from "./Slider";
+import { clsx } from "clsx";
+import { useIsMobile } from "../hooks/useIsMobile";
+import { Alignment, Direction } from "../types/types";
 
 type Props = {
   beforeImageUrl: string;
   afterImageUrl: string;
+  beforeTextAlignment?: Alignment;
+  afterTextAlignment?: Alignment;
+  width?: number;
+  height?: number;
+  direction?: Direction;
 };
 
-const BeforeAfterSlider = ({ beforeImageUrl, afterImageUrl }: Props) => {
-  const [dragging, setDragging] = useState(false);
-  const [offsetX, setOffsetX] = useState(50); // Initial offset is 50% of the width
+const BeforeAfterSlider = ({
+  beforeImageUrl,
+  afterImageUrl,
+  beforeTextAlignment = "left-bottom",
+  afterTextAlignment = "right-bottom",
+  width = 600,
+  height = 600,
+  direction = "horizontal",
+}: Props) => {
   const sliderRef = useRef<HTMLDivElement>(null);
+
+  const isMobile = useIsMobile();
+
+  const [dragging, setDragging] = useState(false);
+  const [size, setSize] = useState(50); // Initial offset is 50%
 
   const startDragging = () => {
     setDragging(true);
@@ -19,9 +39,7 @@ const BeforeAfterSlider = ({ beforeImageUrl, afterImageUrl }: Props) => {
     setDragging(false);
   };
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!dragging) return;
-
+  const drag = (event: React.MouseEvent<HTMLDivElement>) => {
     const slider = sliderRef.current;
     if (!slider) {
       return;
@@ -29,46 +47,86 @@ const BeforeAfterSlider = ({ beforeImageUrl, afterImageUrl }: Props) => {
 
     const rect = slider.getBoundingClientRect();
 
-    const offsetX = ((event.clientX - rect.left) / rect.width) * 100;
+    if (direction === "horizontal") {
+      const offsetX = ((event.clientX - rect.left) / rect.width) * 100;
 
-    if (offsetX < 0) {
-      setOffsetX(0);
-    } else if (offsetX > 100) {
-      setOffsetX(100);
+      if (offsetX < 0) {
+        setSize(0);
+      } else if (offsetX > 100) {
+        setSize(100);
+      } else {
+        setSize(offsetX);
+      }
     } else {
-      setOffsetX(offsetX);
+      const offsetY = ((event.clientY - rect.top) / rect.height) * 100;
+
+      if (offsetY < 0) {
+        setSize(0);
+      } else if (offsetY > 100) {
+        setSize(100);
+      } else {
+        setSize(offsetY);
+      }
     }
   };
 
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!dragging) return;
+
+    drag(event);
+  };
+
+  const handleMouseClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    drag(event);
+  };
+
   return (
-    <div>
-      <div className="relative w-[1200px] h-[600px] overflow-hidden">
+    <div className="flex justify-center">
+      <div
+        style={isMobile ? { width } : { width, height }}
+        className={clsx(
+          "relative overflow-hidden",
+          isMobile ? "aspect-square" : undefined
+        )}
+      >
         <div
-          className="relative w-full h-full cursor-ew-resize"
+          className="relative w-full h-full overflow-hidden"
           ref={sliderRef}
           onMouseMove={handleMouseMove}
+          onClick={handleMouseClick}
           onMouseUp={stopDragging}
           onMouseDown={startDragging}
         >
-          <Image src={beforeImageUrl} alt="Before" className="z-[1]" />
-
           <Image
-            src={afterImageUrl}
-            alt="After"
+            image={beforeImageUrl}
+            alignment={beforeTextAlignment}
+            text="Antes"
             className="z-[2]"
-            style={{
-              clipPath: `polygon(0 0, ${offsetX}% 0, ${offsetX}% 100%, 0 100%)`,
-            }}
+            size={size}
+            direction={direction}
+            dragging={dragging}
           />
 
-          <div
-            className="absolute top-0 w-1 h-full bg-white border-2 border-solid border-black -translate-x-1/2 z-[3] cursor-ew-resize"
-            style={{ left: `${offsetX}%` }}
+          <Image
+            image={afterImageUrl}
+            alignment={afterTextAlignment}
+            text="Depois"
+            className="z-[1]"
+            direction={direction}
+            dragging={dragging}
+          />
+
+          <Slider
+            direction={direction}
+            dragging={dragging}
+            style={
+              direction === "horizontal"
+                ? { left: `${size}%` }
+                : { top: `${size}%` }
+            }
           />
         </div>
       </div>
-
-      <p>{Math.ceil(offsetX)}%</p>
     </div>
   );
 };
