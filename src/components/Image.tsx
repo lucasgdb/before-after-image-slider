@@ -8,7 +8,7 @@ type Props = React.HtmlHTMLAttributes<HTMLDivElement> & {
   alignment: Alignment;
   size?: number;
   direction: Direction;
-  dragging: boolean;
+  isDragging: boolean;
 };
 
 export function Image({
@@ -17,7 +17,7 @@ export function Image({
   alignment,
   size = 100,
   direction,
-  dragging,
+  isDragging,
   ...props
 }: Props) {
   return (
@@ -31,7 +31,7 @@ export function Image({
       }}
       className={clsx(
         "absolute top-0 left-0 w-full h-full overflow-hidden select-none pointer-events-none rounded-md",
-        !dragging ? "transition-all" : undefined,
+        !isDragging ? "transition-all" : undefined,
         props.className
       )}
     >

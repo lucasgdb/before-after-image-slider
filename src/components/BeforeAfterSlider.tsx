@@ -25,15 +25,15 @@ const BeforeAfterSlider = ({
 }: Props) => {
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  const [dragging, setDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState(50); // Initial offset is 50%
 
   const startDragging = () => {
-    setDragging(true);
+    setIsDragging(true);
   };
 
   const stopDragging = () => {
-    setDragging(false);
+    setIsDragging(false);
   };
 
   const drag = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -68,7 +68,7 @@ const BeforeAfterSlider = ({
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!dragging) return;
+    if (!isDragging) return;
 
     drag(event);
   };
@@ -78,47 +78,45 @@ const BeforeAfterSlider = ({
   };
 
   return (
-    <div className="flex justify-center">
-      <Container width={width} height={height}>
-        <div
-          className="relative w-full h-full overflow-hidden"
-          ref={sliderRef}
-          onMouseMove={handleMouseMove}
-          onClick={handleMouseClick}
-          onMouseUp={stopDragging}
-          onMouseDown={startDragging}
-        >
-          <Image
-            image={beforeImageUrl}
-            alignment={beforeTextAlignment}
-            text="Antes"
-            className="z-[2]"
-            size={position}
-            direction={direction}
-            dragging={dragging}
-          />
+    <Container width={width} height={height}>
+      <div
+        className="relative w-full h-full overflow-hidden"
+        ref={sliderRef}
+        onMouseMove={handleMouseMove}
+        onClick={handleMouseClick}
+        onMouseUp={stopDragging}
+        onMouseDown={startDragging}
+      >
+        <Image
+          image={beforeImageUrl}
+          alignment={beforeTextAlignment}
+          text="Antes"
+          className="z-[2]"
+          size={position}
+          direction={direction}
+          isDragging={isDragging}
+        />
 
-          <Image
-            image={afterImageUrl}
-            alignment={afterTextAlignment}
-            text="Depois"
-            className="z-[1]"
-            direction={direction}
-            dragging={dragging}
-          />
+        <Image
+          image={afterImageUrl}
+          alignment={afterTextAlignment}
+          text="Depois"
+          className="z-[1]"
+          direction={direction}
+          isDragging={isDragging}
+        />
 
-          <Slider
-            direction={direction}
-            dragging={dragging}
-            style={
-              direction === "horizontal"
-                ? { left: `${position}%` }
-                : { top: `${position}%` }
-            }
-          />
-        </div>
-      </Container>
-    </div>
+        <Slider
+          direction={direction}
+          isDragging={isDragging}
+          style={
+            direction === "horizontal"
+              ? { left: `${position}%` }
+              : { top: `${position}%` }
+          }
+        />
+      </div>
+    </Container>
   );
 };
 
