@@ -1,9 +1,8 @@
 import { useState, useRef } from "react";
 import { Image } from "./Image";
 import { Slider } from "./Slider";
-import { clsx } from "clsx";
-import { useIsMobile } from "../hooks/useIsMobile";
 import { Alignment, Direction } from "../types/types";
+import { Container } from "./Container";
 
 type Props = {
   beforeImageUrl: string;
@@ -26,10 +25,8 @@ const BeforeAfterSlider = ({
 }: Props) => {
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  const isMobile = useIsMobile();
-
   const [dragging, setDragging] = useState(false);
-  const [size, setSize] = useState(50); // Initial offset is 50%
+  const [position, setPosition] = useState(50); // Initial offset is 50%
 
   const startDragging = () => {
     setDragging(true);
@@ -51,21 +48,21 @@ const BeforeAfterSlider = ({
       const offsetX = ((event.clientX - rect.left) / rect.width) * 100;
 
       if (offsetX < 0) {
-        setSize(0);
+        setPosition(0);
       } else if (offsetX > 100) {
-        setSize(100);
+        setPosition(100);
       } else {
-        setSize(offsetX);
+        setPosition(offsetX);
       }
     } else {
       const offsetY = ((event.clientY - rect.top) / rect.height) * 100;
 
       if (offsetY < 0) {
-        setSize(0);
+        setPosition(0);
       } else if (offsetY > 100) {
-        setSize(100);
+        setPosition(100);
       } else {
-        setSize(offsetY);
+        setPosition(offsetY);
       }
     }
   };
@@ -82,13 +79,7 @@ const BeforeAfterSlider = ({
 
   return (
     <div className="flex justify-center">
-      <div
-        style={isMobile ? { width } : { width, height }}
-        className={clsx(
-          "relative overflow-hidden",
-          isMobile ? "aspect-square" : undefined
-        )}
-      >
+      <Container width={width} height={height}>
         <div
           className="relative w-full h-full overflow-hidden"
           ref={sliderRef}
@@ -102,7 +93,7 @@ const BeforeAfterSlider = ({
             alignment={beforeTextAlignment}
             text="Antes"
             className="z-[2]"
-            size={size}
+            size={position}
             direction={direction}
             dragging={dragging}
           />
@@ -121,12 +112,12 @@ const BeforeAfterSlider = ({
             dragging={dragging}
             style={
               direction === "horizontal"
-                ? { left: `${size}%` }
-                : { top: `${size}%` }
+                ? { left: `${position}%` }
+                : { top: `${position}%` }
             }
           />
         </div>
-      </div>
+      </Container>
     </div>
   );
 };
