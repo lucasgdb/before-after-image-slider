@@ -78,45 +78,47 @@ const BeforeAfterSlider = ({
   };
 
   return (
-    <Container width={width} height={height}>
-      <div
-        className="relative w-full h-full overflow-hidden"
-        ref={sliderRef}
-        onMouseMove={handleMouseMove}
-        onClick={handleMouseClick}
-        onMouseUp={stopDragging}
-        onMouseDown={startDragging}
-      >
-        <Image
-          image={beforeImageUrl}
-          alignment={beforeTextAlignment}
-          text="Antes"
-          className="z-[2]"
-          size={position}
-          direction={direction}
-          isDragging={isDragging}
-        />
+    <div className="flex justify-center">
+      <Container width={width} height={height}>
+        <div
+          className="relative w-full h-full overflow-hidden"
+          ref={sliderRef}
+          onMouseMove={handleMouseMove}
+          onClick={handleMouseClick}
+          onMouseUp={stopDragging}
+          onMouseDown={startDragging}
+        >
+          <Image
+            image={beforeImageUrl}
+            alignment={beforeTextAlignment}
+            text="Antes"
+            className="z-[2]"
+            size={position}
+            direction={direction}
+            isDragging={isDragging}
+          />
 
-        <Image
-          image={afterImageUrl}
-          alignment={afterTextAlignment}
-          text="Depois"
-          className="z-[1]"
-          direction={direction}
-          isDragging={isDragging}
-        />
+          <Image
+            image={afterImageUrl}
+            alignment={afterTextAlignment}
+            text="Depois"
+            className="z-[1]"
+            direction={direction}
+            isDragging={isDragging}
+          />
 
-        <Slider
-          direction={direction}
-          isDragging={isDragging}
-          style={
-            direction === "horizontal"
-              ? { left: `${position}%` }
-              : { top: `${position}%` }
-          }
-        />
-      </div>
-    </Container>
+          <Slider
+            direction={direction}
+            isDragging={isDragging}
+            style={
+              direction === "horizontal"
+                ? { left: `${position}%` }
+                : { top: `${position}%` }
+            }
+          />
+        </div>
+      </Container>
+    </div>
   );
 };
 
