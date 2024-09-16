@@ -83,7 +83,7 @@ const BeforeAfterSlider = ({
   };
 
   const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
-    if (!dragging) return;
+    if (!isDragging) return;
 
     dragTouching(event);
   };
