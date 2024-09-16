@@ -25,15 +25,15 @@ const BeforeAfterSlider = ({
 }: Props) => {
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  const [dragging, setDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState(50); // Initial offset is 50%
 
   const startDragging = () => {
-    setDragging(true);
+    setIsDragging(true);
   };
 
   const stopDragging = () => {
-    setDragging(false);
+    setIsDragging(false);
   };
 
   const drag = ({ clientX, clientY }: { clientX: number; clientY: number }) => {
@@ -77,7 +77,7 @@ const BeforeAfterSlider = ({
   };
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!dragging) return;
+    if (!isDragging) return;
 
     dragMouse(event);
   };
@@ -114,7 +114,7 @@ const BeforeAfterSlider = ({
             className="z-[2]"
             size={position}
             direction={direction}
-            dragging={dragging}
+            isDragging={isDragging}
           />
 
           <Image
@@ -123,12 +123,12 @@ const BeforeAfterSlider = ({
             text="Depois"
             className="z-[1]"
             direction={direction}
-            dragging={dragging}
+            isDragging={isDragging}
           />
 
           <Slider
             direction={direction}
-            dragging={dragging}
+            isDragging={isDragging}
             style={
               direction === "horizontal"
                 ? { left: `${position}%` }
