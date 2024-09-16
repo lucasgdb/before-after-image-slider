@@ -36,7 +36,7 @@ const BeforeAfterSlider = ({
     setDragging(false);
   };
 
-  const drag = (event: React.MouseEvent<HTMLDivElement>) => {
+  const drag = ({ clientX, clientY }: { clientX: number; clientY: number }) => {
     const slider = sliderRef.current;
     if (!slider) {
       return;
@@ -45,7 +45,7 @@ const BeforeAfterSlider = ({
     const rect = slider.getBoundingClientRect();
 
     if (direction === "horizontal") {
-      const offsetX = ((event.clientX - rect.left) / rect.width) * 100;
+      const offsetX = ((clientX - rect.left) / rect.width) * 100;
 
       if (offsetX < 0) {
         setPosition(0);
@@ -55,7 +55,7 @@ const BeforeAfterSlider = ({
         setPosition(offsetX);
       }
     } else {
-      const offsetY = ((event.clientY - rect.top) / rect.height) * 100;
+      const offsetY = ((clientY - rect.top) / rect.height) * 100;
 
       if (offsetY < 0) {
         setPosition(0);
@@ -67,10 +67,25 @@ const BeforeAfterSlider = ({
     }
   };
 
+  const dragMouse = (event: React.MouseEvent<HTMLDivElement>) => {
+    drag({ clientX: event.clientX, clientY: event.clientY });
+  };
+
+  const dragTouching = (event: React.TouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    drag({ clientX: touch.clientX, clientY: touch.clientY });
+  };
+
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!dragging) return;
 
-    drag(event);
+    dragMouse(event);
+  };
+
+  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (!dragging) return;
+
+    dragTouching(event);
   };
 
   const handleMouseClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -81,12 +96,16 @@ const BeforeAfterSlider = ({
     <div className="flex justify-center">
       <Container width={width} height={height}>
         <div
-          className="relative w-full h-full overflow-hidden"
+          className="relative w-full h-full overflow-hidden touch-none"
           ref={sliderRef}
           onMouseMove={handleMouseMove}
           onClick={handleMouseClick}
           onMouseUp={stopDragging}
           onMouseDown={startDragging}
+          onTouchStart={startDragging}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={stopDragging}
+          draggable={false}
         >
           <Image
             image={beforeImageUrl}
