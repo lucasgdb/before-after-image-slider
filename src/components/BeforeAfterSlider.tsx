@@ -3,6 +3,7 @@ import { Image } from "./Image";
 import { Slider } from "./Slider";
 import { Alignment, Direction } from "../types/types";
 import { Container } from "./Container";
+import { cx } from "../utils/cx";
 
 type Props = {
   beforeImageUrl: string;
@@ -96,7 +97,10 @@ const BeforeAfterSlider = ({
     <div className="flex justify-center">
       <Container width={width} height={height}>
         <div
-          className="relative w-full h-full overflow-hidden touch-none"
+          className={cx(
+            "relative w-full h-full overflow-hidden",
+            direction === "vertical" ? "touch-pan-x" : "touch-pan-y"
+          )}
           ref={sliderRef}
           onMouseMove={handleMouseMove}
           onClick={handleMouseClick}
