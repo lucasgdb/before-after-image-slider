@@ -6,6 +6,9 @@ export default {
       boxShadow: {
         dark: "rgba(0, 0, 0, 0.3) 0px 0px 3px 0px",
       },
+      dropShadow: {
+        dark: " 0px 0px 1px rgba(0, 0, 0, 0.3)",
+      },
     },
   },
   plugins: [],
