@@ -3,7 +3,6 @@ import { Image } from "./Image";
 import { Slider } from "./Slider";
 import { Alignment, Direction } from "../types/types";
 import { Container } from "./Container";
-import { cx } from "../utils/cx";
 
 type Props = {
   beforeImageUrl: string;
@@ -48,20 +47,20 @@ const BeforeAfterSlider = ({
     if (direction === "horizontal") {
       const offsetX = ((clientX - rect.left) / rect.width) * 100;
 
-      if (offsetX < 0) {
-        setPosition(0);
-      } else if (offsetX > 100) {
-        setPosition(100);
+      if (offsetX <= 0.5) {
+        setPosition(0.5);
+      } else if (offsetX >= 99.5) {
+        setPosition(99.5);
       } else {
         setPosition(offsetX);
       }
     } else {
       const offsetY = ((clientY - rect.top) / rect.height) * 100;
 
-      if (offsetY < 0) {
-        setPosition(0);
-      } else if (offsetY > 100) {
-        setPosition(100);
+      if (offsetY < 0.5) {
+        setPosition(0.5);
+      } else if (offsetY > 99.5) {
+        setPosition(99.5);
       } else {
         setPosition(offsetY);
       }
@@ -97,18 +96,12 @@ const BeforeAfterSlider = ({
     <div className="flex justify-center">
       <Container width={width} height={height}>
         <div
-          className={cx(
-            "relative w-full h-full overflow-hidden",
-            direction === "vertical" ? "touch-pan-x" : "touch-pan-y"
-          )}
           ref={sliderRef}
-          onMouseMove={handleMouseMove}
+          className="relative w-full h-full overflow-hidden"
           onClick={handleMouseClick}
           onMouseUp={stopDragging}
+          onMouseMove={handleMouseMove}
           onMouseDown={startDragging}
-          onTouchStart={startDragging}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={stopDragging}
           draggable={false}
         >
           <Image
@@ -131,6 +124,9 @@ const BeforeAfterSlider = ({
           />
 
           <Slider
+            onTouchStart={startDragging}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={stopDragging}
             direction={direction}
             isDragging={isDragging}
             style={
