@@ -106,7 +106,7 @@ const BeforeAfterSlider = ({
           <Image
             image={beforeImageUrl}
             alignment={beforeTextAlignment}
-            text="Antes"
+            text="Before"
             className="z-[2]"
             size={position}
             direction={direction}
@@ -116,7 +116,7 @@ const BeforeAfterSlider = ({
           <Image
             image={afterImageUrl}
             alignment={afterTextAlignment}
-            text="Depois"
+            text="After"
             className="z-[1]"
             direction={direction}
             isDragging={isDragging}
