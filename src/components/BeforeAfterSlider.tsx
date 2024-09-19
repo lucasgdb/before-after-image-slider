@@ -102,7 +102,6 @@ const BeforeAfterSlider = ({
           onMouseUp={stopDragging}
           onMouseMove={handleMouseMove}
           onMouseDown={startDragging}
-          draggable={false}
         >
           <Image
             image={beforeImageUrl}

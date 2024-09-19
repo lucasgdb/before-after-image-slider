@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from "react";
 
 export const useIsMobile = (): boolean => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useLayoutEffect(() => {
     const updateSize = (): void => {
