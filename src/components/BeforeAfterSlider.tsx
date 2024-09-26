@@ -113,7 +113,7 @@ const BeforeAfterSlider = ({
       <Container width={width} height={height}>
         <div
           ref={sliderRef}
-          className="relative w-full h-full overflow-hidden"
+          className="relative w-full h-full overflow-hidden rounded-md"
           onClick={handleMouseClick}
           onMouseMove={handleMouseMove}
           onMouseDown={startDragging}
