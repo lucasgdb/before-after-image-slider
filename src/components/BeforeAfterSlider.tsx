@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Image } from "./Image";
 import { Slider } from "./Slider";
 import { Alignment, Direction } from "../types/types";
@@ -27,6 +27,22 @@ const BeforeAfterSlider = ({
 
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState(50); // Initial offset is 50%
+
+  useEffect(() => {
+    const handleMouseUp = () => {
+      if (isDragging) {
+        stopDragging();
+      }
+    };
+
+    if (isDragging) {
+      window.addEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
 
   const startDragging = () => {
     setIsDragging(true);
@@ -99,7 +115,6 @@ const BeforeAfterSlider = ({
           ref={sliderRef}
           className="relative w-full h-full overflow-hidden"
           onClick={handleMouseClick}
-          onMouseUp={stopDragging}
           onMouseMove={handleMouseMove}
           onMouseDown={startDragging}
         >

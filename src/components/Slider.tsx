@@ -18,15 +18,14 @@ export function Slider({ direction, isDragging, ...props }: Props) {
         "absolute z-[3] bg-transparent select-none touch-none",
         !isDragging ? "transition-all" : undefined,
         direction === "horizontal"
-          ? "top-0 -translate-x-1/2 w-8 h-full"
-          : "left-0 -translate-y-1/2 h-8 w-full",
+          ? "top-0 -translate-x-1/2 w-9 h-full"
+          : "left-0 -translate-y-1/2 h-9 w-full",
         props.className
       )}
     >
       <div
         className={clsx(
           "absolute bg-white shadow-dark z-[3] select-none",
-          !isDragging ? "transition-all" : undefined,
           direction === "horizontal"
             ? "top-0 left-1/2 -translate-x-1/2 w-1.5 h-full cursor-ew-resize"
             : "left-0 top-1/2 -translate-y-1/2 h-1.5 w-full cursor-ns-resize",
